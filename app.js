@@ -7,10 +7,33 @@ const app = express();
 const cors = require('cors');
 const jwt = require('jsonwebtoken'); // Importar jsonwebtoken
 const fs = require('fs');
+const swaggerUi = require('swagger-ui-express');
+const swaggerJsdoc = require('swagger-jsdoc');
 const PORT = process.env.PORT || 3000;
 require('dotenv').config();
 
 const SECRET_KEY = process.env.JWT_SECRET || '_clave_secreta'; // Cambia esto a una clave secreta fuerte
+
+// Configuración de Swagger
+const swaggerOptions = {
+  swaggerDefinition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'API Documentation',
+      version: '1.0.0',
+      description: 'API Information',
+    },
+    servers: [
+      {
+        url: `http://localhost:${PORT}`,
+      },
+    ],
+  },
+  apis: ['./routes/*.js'], // Ruta a tus archivos de rutas
+};
+
+const swaggerDocs = swaggerJsdoc(swaggerOptions);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // Middleware para servir archivos estáticos
 app.use(express.static(path.join(__dirname, 'public')));
@@ -38,6 +61,30 @@ app.get('/', (req, res) => {
 });
 
 // Endpoint para inicio de sesión
+// Endpoint para inicio de sesión
+/**
+ * @swagger
+ * /api/login:
+ *   post:
+ *     summary: Iniciar sesión
+ *     description: Endpoint para iniciar sesión
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               contacto:
+ *                 type: string
+ *               contraseña:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Inicio de sesión exitoso
+ *       401:
+ *         description: Credenciales incorrectas
+ */
 app.post('/api/login', (req, res) => {
     const { contacto, contraseña } = req.body;
 
