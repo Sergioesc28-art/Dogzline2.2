@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "nombre": "Yoselin Valentina Alamilla Avila",
+    "contacto": "yoselinalamilla3@gmail.com",
+    "contraseña": "Yoselin123",
+    "ubicacion": "Mérida, Yucatán",
+    "telefono": "9991234567",
+    "mascotas": [1]
+  },
+  {
+    "id": 2,
+    "nombre": "Marbella Samantha Terraza Alamilla",
+    "contacto": "Marbellaterraza729@gmail.com",
+    "contraseña": "Marbella456",
+    "ubicacion": "Mérida, Yucatán",
+    "telefono": "9998765432",
+    "mascotas": [2, 3]
+  }
+]

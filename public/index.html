@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio de Sesión y Dashboard</title>
+</head>
+<body>
+    <h2>Inicio de Sesión</h2>
+    <form id="loginForm">
+        <label for="contacto">Correo Electrónico:</label>
+        <input type="email" id="contacto" name="contacto" required>
+        <br>
+        <label for="contraseña">Contraseña:</label>
+        <input type="password" id="contraseña" name="contraseña" required>
+        <br>
+        <button type="submit">Iniciar Sesión</button>
+    </form>
+
+    <div id="dashboard" style="display:none;">
+        <h2>Dashboard</h2>
+        <button id="verUsuarios">Ver Usuarios</button>
+        <button id="verMascotas">Ver Mascotas</button>
+        <button id="buscarMascota">Buscar Mascota</button>
+        <button id="eliminarMascota">Eliminar Mascota</button>
+        <button id="cerrarSesion">Cerrar Sesión</button>
+
+        <div id="resultados"></div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const contacto = document.getElementById('contacto').value;
+            const contraseña = document.getElementById('contraseña').value;
+
+            fetch('/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ contacto, contraseña })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.token) {
+                    localStorage.setItem('token', data.token);
+                    alert('Inicio de sesión exitoso');
+                    document.getElementById('loginForm').style.display = 'none';
+                    document.getElementById('dashboard').style.display = 'block';
+                } else {
+                    alert('Usuario o contraseña incorrectos');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+
+        // Obtener el token del almacenamiento local
+        const token = localStorage.getItem('token');
+
+        if (token) {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+        }
+
+        document.getElementById('verUsuarios').addEventListener('click', function() {
+            fetch('/api/usuarios', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                const resultados = document.getElementById('resultados');
+                resultados.innerHTML = '<h3>Usuarios:</h3><pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            })
+            .catch(error => console.error('Error:', error));
+        });
+
+        document.getElementById('verMascotas').addEventListener('click', function() {
+            fetch('/api/mascotas', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                const resultados = document.getElementById('resultados');
+                resultados.innerHTML = '<h3>Mascotas:</h3><pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            })
+            .catch(error => console.error('Error:', error));
+        });
+
+        document.getElementById('buscarMascota').addEventListener('click', function() {
+            const id = prompt('Ingrese el ID de la mascota:');
+            if (id) {
+                fetch(`/api/mascotas/${id}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const resultados = document.getElementById('resultados');
+                    if (data) {
+                        resultados.innerHTML = '<h3>Mascota:</h3><pre>' + JSON.stringify(data, null, 2) + '</pre>';
+                    } else {
+                        resultados.innerHTML = '<h3>Mascota no encontrada</h3>';
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        });
+
+        document.getElementById('eliminarMascota').addEventListener('click', function() {
+            const id = prompt('Ingrese el ID de la mascota a eliminar:');
+            if (id) {
+                fetch(`/api/mascotas/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert('Mascota eliminada');
+                    const resultados = document.getElementById('resultados');
+                    resultados.innerHTML = '<h3>Mascota eliminada:</h3><pre>' + JSON.stringify(data, null, 2) + '</pre>';
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        });
+
+        document.getElementById('cerrarSesion').addEventListener('click', function() {
+            localStorage.removeItem('token');
+            location.reload();
+        });
+    </script>
+</body>
+</html>

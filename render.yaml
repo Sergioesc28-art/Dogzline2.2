@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: mascotas-api
+    runtime: node
+    plan: free
+    buildCommand: 'npm install'
+    startCommand: 'node app.js'
+    envVars:
+      - key: JWT_SECRET
+        value: '_clave_secreta'

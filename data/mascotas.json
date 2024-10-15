@@ -1,0 +1,58 @@
+{
+    "mascotas": [
+      {
+        "id": 1,
+        "nombre": "Tobi",
+        "tipo": "Perro",
+        "raza": "Schnauzer",
+        "edad": 1,
+        "caracteristicas": [
+          "Amigable",
+          "Juguetón",
+          "Imperativo",
+          "Protector"
+        ],
+        "duenoId": 1
+      },
+      {
+        "id": 2,
+        "nombre": "Apolo",
+        "tipo": "Perro",
+        "raza": "Cruza de Husky Siberiano con Malamute de Alaska",
+        "edad": 1,
+        "caracteristicas": [
+          "Curioso",
+          "Juguetón",
+          "Imperactivo"
+        ],
+        "duenoId": 2
+      },
+      {
+        "id": 3,
+        "nombre": "Cheto",
+        "tipo": "Perro",
+        "raza": "Mestizo",
+        "edad": 3,
+        "caracteristicas": [
+          "Juguetón",
+          "Amigable",
+          "Miedoso"
+        ],
+        "duenoId": 2
+      },
+      {
+        "id": 4,
+        "nombre": "julian",
+        "tipo": "Perro",
+        "raza": "labrador r",
+        "edad": 1,
+        "caracteristicas": [
+          "Amigable",
+          "Juguetón",
+          "Imperativo",
+          "Protector"
+        ],
+        "duenoId": 1
+      }
+    ]
+  }
